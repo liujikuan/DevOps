@@ -1,15 +1,21 @@
 # DevOps
 *practise DevOps practice for job interview*
 
-## Github actions 
-
-### use a container action to run containerized code
-
-commands:
+## some useful Git commands
 
 git remote set-url origin `https://liujikuan:<personal access token>@github.com/liujikuan/DevOps.git`
 
 git log --all --decorate --oneline --graph
+
+## Github actions 
+
+**are categorized into two:**
+1. use a container action to run containerized code
+2. use a JavaScript action to run javascript code such as Node.js code
+
+
+
+**The following command triggers a GitHub Actions workflow for the specified branch using the GitHub API**
 
 curl -X POST \
   -H "Accept: application/vnd.github.v3+json" \
@@ -27,4 +33,4 @@ curl -X POST \
 2. create a freestyle project, and set the Git repository in the *Source Code Management* section
 3. check the *GitHub hook trigger for GITScm polling* option in Jenkins.
 4. create or update a file in the repository
-5. 
+
