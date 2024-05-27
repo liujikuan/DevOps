@@ -7,7 +7,7 @@
 
 commands:
 
-git remote set-url origin https://liujikuan:`<personal access token>`@github.com/liujikuan/DevOps.git
+git remote set-url origin `https://liujikuan:<personal access token>@github.com/liujikuan/DevOps.git`
 
 git log --all --decorate --oneline --graph
 
