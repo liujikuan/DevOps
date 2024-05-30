@@ -1,4 +1,7 @@
 const { Builder, By } = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
+const options = new chrome.Options();
+options.addArguments('--ignore-certificate-errors');
 
 async function googleSearch() {
     let driver = await new Builder().forBrowser('chrome').build();
