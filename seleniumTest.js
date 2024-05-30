@@ -1,18 +1,20 @@
-var webdriver = require('selenium-webdriver');
+const { Builder, By } = require('selenium-webdriver');
 
-function googleSearch() {
+async function googleSearch() {
+    let driver = await new Builder().forBrowser('chrome').build();
 
-    var driver = new webdriver.Builder().forBrowser('chrome').build();
-
-    driver.get('http://localhost:8080').then(function () {
-        driver.findElement(webdriver.By.linkText('Sign In')).click().then(function () {
-            driver.getTitle().then(function (title) {
-                setTimeout(function () {
-                    console.log(title);
-                    driver.quit();
-                }, 5000);
-            });
-        });
-    });
+    try {
+        await driver.get('http://localhost:8080');
+        await driver.findElement(By.linkText('Sign In')).click();
+        let title = await driver.getTitle();
+        setTimeout(() => {
+            console.log(title);
+            driver.quit();
+        }, 5000);
+    } catch (error) {
+        console.error('Error:', error);
+        await driver.quit();
+    }
 }
+
 googleSearch();
