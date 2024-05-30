@@ -14,7 +14,7 @@ jobs:
       selenium:
         image: redis
         ports:
-          - 4444:4444
+          - 4444:6379
 
     steps:
     - name: Checkout code
@@ -36,4 +36,6 @@ jobs:
     - name: Run Selenium tests
       run: |
         export SELENIUM_REMOTE_URL=http://selenium:4444/wd/hub
+        export REDIS_HOST=selenium
+        export REDIS_PORT=4444
         node seleniumTest.js
