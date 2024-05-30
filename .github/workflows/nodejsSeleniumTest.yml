@@ -12,7 +12,7 @@ jobs:
     container: node:10.18-jessie
     services:
       selenium:
-        image: selenium/standalone-chrome
+        image: redis
         ports:
           - 4444:4444
 
