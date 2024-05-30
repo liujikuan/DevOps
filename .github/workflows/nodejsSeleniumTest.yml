@@ -6,7 +6,7 @@ on:
       - main  # Change this to the branch you want to trigger the workflow on
 
 jobs:
-  build:
+  build_and_test:
 
     runs-on: ubuntu-latest
 
@@ -35,5 +35,5 @@ jobs:
 
     - name: Run Selenium tests
       run: |
-        export SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub
+        export SELENIUM_REMOTE_URL=http://selenium:4444/wd/hub
         node seleniumTest.js
