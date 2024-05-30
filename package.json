@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "chromedriver": "^125.0.2",
-    "selenium-webdriver": "^4.21.0",
     "redis": "4.6.14"
   }
 }
