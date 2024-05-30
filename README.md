@@ -1,29 +1,36 @@
 # DevOps
-practise DevOps practice for job interview
+*practise DevOps practice for job interview*
 
-** Github actions 
+## some useful Git commands
 
-*** use a container action to run containerized code
-
-
-
-** commands
-
-git remote set-url origin https://liujikuan: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@github.com/liujikuan/DevOps.git
+git remote set-url origin `https://liujikuan:<personal access token>@github.com/liujikuan/DevOps.git`
 
 git log --all --decorate --oneline --graph
 
+## Github actions 
+
+**are categorized into two:**
+1. use a container action to run containerized code
+2. use a JavaScript action to run javascript code such as Node.js code
+
+
+
+**The following command triggers a GitHub Actions workflow for the specified branch using the GitHub API**
+
 curl -X POST \
   -H "Accept: application/vnd.github.v3+json" \
-  -H "Authorization: token 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" \
+  -H "Authorization: token `<personal access token>`" \
   https://api.github.com/repos/liujikuan/DevOps/actions/workflows/main.yml/dispatches \
   -d '{"ref":"main"}'
 
 
 
-** Jenkins pipeline
+## Jenkins pipeline
 
-*** configure Github webhook to trigger the pipeline
+### Configure Github webhook to trigger the pipeline
 
 1. Use ngrok as a HTTP proxy
-2. check the GitHub hook trigger for GITScm polling option in Jenkins.
+2. create a freestyle project, and set the Git repository in the *Source Code Management* section
+3. check the *GitHub hook trigger for GITScm polling* option in Jenkins.
+4. create or update a file in the repository
+
