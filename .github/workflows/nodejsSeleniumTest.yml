@@ -3,18 +3,26 @@ name: Node.js Selenium test
 on:
   push:
     branches:
-      - main  # Change this to the branch you want to trigger the workflow on
+      - main
 
 jobs:
   build_and_test:
-
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
     services:
       selenium:
         image: selenium/standalone-chrome
         ports:
           - 4444:4444
+        options: --network app-network
+      app:
+        image: node:20.14.0-alpine3.20
+        ports:
+          - 8080:8080
+        options: --network app-network
+        volumes:
+          - ./:/app
+        command: >
+          sh -c "cd /app && npm install && nohup node login.js"
 
     steps:
     - name: Checkout code
@@ -23,15 +31,10 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'  # You can change this to the version you need
+        node-version: '14'
 
     - name: Install dependencies
       run: npm install
-
-    - name: Run server
-      run: |
-        nohup node login.js &
-        sleep 5  # Wait for server to start
 
     - name: Run Selenium tests
       run: |

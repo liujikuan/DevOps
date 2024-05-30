@@ -4,7 +4,7 @@ async function googleSearch() {
     let driver = await new Builder().forBrowser('chrome').build();
 
     try {
-        await driver.get('http://localhost:8080');
+        await driver.get('http://app:8080');
         await driver.findElement(By.linkText('Sign In')).click();
         let title = await driver.getTitle();
         setTimeout(() => {
