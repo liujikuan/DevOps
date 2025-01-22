@@ -1,0 +1,1 @@
+There is service container for Redis, which would be destroyed when the job completes.
