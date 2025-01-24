@@ -1,5 +1,12 @@
-# DevOps
-*practise DevOps practice for job interview*
+# Index
+- [2-factor authentication](https://github.com/liujikuan/DevOps/tree/2FA)
+- [service Container & RedisClient](https://github.com/liujikuan/DevOps/tree/serviceContainerAndRedisClient)
+
+
+
+
+
+# Note
 
 ## some useful Git commands
 
