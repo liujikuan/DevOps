@@ -1,9 +1,12 @@
-# Index
+# Table of Contents
 - [2-factor authentication](https://github.com/liujikuan/DevOps/tree/2FA)
 - [service Container & RedisClient](https://github.com/liujikuan/DevOps/tree/serviceContainerAndRedisClient)
 
 
-
+# What I did
+GitHub actions workflow triggered by push and workflow_dispatch executes a custom action.
+The action initiates a docker container.
+The Docker container accepts input and outputs results.
 
 
 # Note
