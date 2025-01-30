@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Serverless API Payment
+Transform:
+- AWS::Serverless-2016-10-31
+Resources:
+  PaymentApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: PaymentApi
+      StageName: prod
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn:
+              Fn::GetAtt:
+              - UserPool
+              - Arn
+      Cors: '''*'''
+      DefinitionBody:
+        swagger: '2.0'
+        info:
+          title: PaymentAPI
+          version: '1.0'
+        paths:
+          /payment:
+            post:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreatePaymentFunction.Arn}/invocations
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: GET
+                type: aws_proxy
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetPaymentFunction.Arn}/invocations
+  CreatePaymentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CreatePaymentFunction
+      Handler: app.lambda_handler
+      Runtime: python3.10
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: PaymentTable
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: PaymentTable
+    Metadata:
+      SamResourceId: CreatePaymentFunction
+  GetPaymentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: GetPaymentFunction
+      Handler: app.lambda_handler
+      Runtime: python3.10
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: PaymentTable
+      Policies:
+      - DynamoDBReadPolicy:
+          TableName:
+            Ref: PaymentTable
+    Metadata:
+      SamResourceId: GetPaymentFunction
+  PaymentTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: PaymentTable
+      AttributeDefinitions:
+      - AttributeName: PaymentId
+        AttributeType: S
+      KeySchema:
+      - AttributeName: PaymentId
+        KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: PaymentApiUserPool
+      AutoVerifiedAttributes:
+      - email
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: PaymentApiUserPoolClient
+      UserPoolId:
+        Ref: UserPool
+      GenerateSecret: true
+      AllowedOAuthFlows:
+      - implicit
+      AllowedOAuthScopes:
+      - email
+      - openid
+      CallbackURLs:
+      - https://example.com/callback
+      LogoutURLs:
+      - https://example.com/logout
+      AllowedOAuthFlowsUserPoolClient: true
