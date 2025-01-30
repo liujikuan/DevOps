@@ -1,6 +1,6 @@
-Here is a `README.md` file for your payment API application:
 
-```markdown
+
+
 # Payment API Application
 
 This project is a **serverless payment API** built using **AWS SAM (Serverless Application Model)**. It leverages AWS services such as **API Gateway, Lambda, DynamoDB, and Cognito** to provide a secure and scalable payment processing system.
