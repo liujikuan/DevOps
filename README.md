@@ -55,7 +55,8 @@ Before deploying the project, ensure you have:
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/liujikuan/DevOps.git
-cd payment-api
+cd DevOps
+git checkout serverlessPaymentAPI
 ```
 
 ### 2. Build the Application
