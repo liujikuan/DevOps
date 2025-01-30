@@ -103,3 +103,8 @@ Resources:
       LogoutURLs:
         - https://example.com/logout
       AllowedOAuthFlowsUserPoolClient: true
+
+Outputs:
+  ApiGatewayInvokeURL:
+    Description: "API Gateway Invoke URL"
+    Value: !Sub "https://${PaymentApi}.execute-api.${AWS::Region}.amazonaws.com/prod"

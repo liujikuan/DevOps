@@ -69,8 +69,31 @@ sam deploy --guided
 ```
 Follow the prompts to configure deployment settings.
 
-### 4. Testing the API
-
+### 4. configure the AWS Cognito
+#### 4.1 Set up a domain 
+**Steps**:
+1. Sign in to the AWS Cognito Console.
+2. Go to User Pools → Select your user pool.
+3. Navigate to **Domain** under *Branding*
+#### 4.2 Customize the style of your login page.
+**Steps**:
+1. Sign in to the AWS Cognito Console.
+2. Go to User Pools → Select your user pool.
+3. Navigate to **Managed login** under *Branding* → Click on *Create a style*.
+#### 4.3 Obtain Cognito Token for API Authentication
+Here I use `Implicit` OAuth grant type as an example:
+**Steps:**
+1. Set up Allowed callback URLs in the App client configuration page.
+2. Use the AWS Cognito Hosted UI or authenticate using the API.
+sample URL: 
+`https://<custom domain>.auth.<region>.amazoncognito.com/oauth2/authorize?client_id=<CLIENT_ID>&redirect_uri=<REDIRECT_URI>&response_type=token&scope=<SCOPE>`
+3. Extract the `access_token` from the response(if using  `Implicit`).
+### 5. Testing the API
+#### Retrieve API Gateway URL
+After deployment, retrieve your API Gateway URL by running:
+```bash
+aws cloudformation describe-stacks --stack-name <your-stack-name> --query "Stacks[0].Outputs[?OutputKey=='ApiGatewayInvokeURL'].OutputValue" --output text
+```
 #### Create a Payment
 ```bash
 curl -X POST https://<your-api-id>.execute-api.region.amazonaws.com/prod/payment \
@@ -84,6 +107,9 @@ curl -X POST https://<your-api-id>.execute-api.region.amazonaws.com/prod/payment
 curl -X GET https://<your-api-id>.execute-api.region.amazonaws.com/prod/payment?paymentId=<payment_id> \
     -H "Authorization: Bearer <your_cognito_access_token>"
 ```
+
+
+
 
 ## Cleanup
 
