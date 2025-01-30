@@ -118,9 +118,5 @@ To remove all deployed resources:
 sam delete
 ```
 
-## Future Improvements
 
-- Implement a **payment status update** feature.
-- Integrate with external payment gateways (e.g., Stripe, PayPal).
-- Add logging and monitoring with **AWS CloudWatch**.
 
