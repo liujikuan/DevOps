@@ -23,16 +23,14 @@ jobs:
           java-version: '18'
           distribution: 'temurin'
 
-      - name: Build the project
-        run: |
-          cd '${{ github.workspace }}/code'
-          mvn clean compile
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
           languages: java
           source-root: '${{ github.workspace }}/code'
+
+      - name: Autobuild with CodeQL
+        uses: github/codeql-action/autobuild@v2
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
