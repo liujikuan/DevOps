@@ -23,7 +23,7 @@ jobs:
         uses: github/codeql-action/init@v2
         with:
           languages: java
-
+          source-root: "/home/runner/work/Redback-Capstone-deakin-project/Redback-Capstone-deakin-project/T1_2023/Project\\ 2\\ 2-Factor\\ Authentication\\ \\(2FA\\)/code"
       # Step 3: Perform CodeQL Analysis
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
