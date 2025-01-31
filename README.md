@@ -109,6 +109,10 @@ curl -X GET https://<your-api-id>.execute-api.region.amazonaws.com/prod/payment?
     -H "Authorization: Bearer <your_cognito_access_token>"
 ```
 
+#### Get User Info
+```bash
+curl -X GET https://<custom domain>.auth.<region>.amazoncognito.com/oauth2/userInfo -H 'Authorization: Bearer <your_cognito_access_token>'
+```
 
 
 
