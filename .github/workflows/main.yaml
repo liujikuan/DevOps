@@ -4,6 +4,12 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+
+
+permissions:
+  security-events: write  # 🔥 Fix: Allows uploading CodeQL results
+
+  
 jobs:
 
   build-and-deploy:
