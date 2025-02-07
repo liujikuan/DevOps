@@ -76,8 +76,9 @@ sudo ./sam-installation/install
 # Service Container & Redis Client
 
 **Branch:** `serviceContainerAndRedisClient`
+
 **Description:**
-There is service container for Redis, which would be destroyed when the job completes.
+This repository contains a sample JavaScript GitHub Action that interacts with a Redis service container which would be destroyed when the job completes.
 
 
 # What I did in this branch
