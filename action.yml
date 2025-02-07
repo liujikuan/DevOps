@@ -12,6 +12,3 @@ inputs:
 runs:
     using: 'node12'
     main: 'client.js'
-    env:
-        REDIS_HOST: ${{ inputs.REDIS_HOST }}
-        REDIS_PORT: ${{ inputs.REDIS_PORT }}
