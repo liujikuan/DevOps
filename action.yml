@@ -1,14 +1,9 @@
 name: 'Sample JavaScript Action'
 description: 'A sample GitHub Action to run client.js'
 inputs:
-    REDIS_HOST:
-        description: 'The hostname used to communicate with the Redis service container'
-        required: true
-        default: 'localhost'
-    REDIS_PORT:
-        description: 'The default Redis port'
-        required: true
-        default: '6379'
+    MyInput:
+        description: ''
+        required: false
 runs:
     using: 'node12'
     main: 'client.js'

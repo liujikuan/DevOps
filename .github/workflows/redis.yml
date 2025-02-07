@@ -36,11 +36,9 @@ jobs:
         # Invokes the custom action instead of running the 'node' command
         uses: ./
         # Environment variable used by the `client.js` script to create a new Redis client.
-        with:
+         
+        env:
           # The hostname used to communicate with the Redis service container
           REDIS_HOST: redis
           # The default Redis port
-          REDIS_PORT: 6379
-        env:
-          REDIS_HOST: redis
           REDIS_PORT: 6379
