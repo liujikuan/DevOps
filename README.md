@@ -11,4 +11,4 @@ This repository contains a sample JavaScript GitHub Action that interacts with a
 
 ### Usage
 
-To use this action in your workflow, I reference it in my `.github/workflows/redis.yml` file.
+To use this action in my workflow, I reference it in my `.github/workflows/redis.yml` file.
