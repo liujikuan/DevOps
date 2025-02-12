@@ -1,5 +1,7 @@
 name: Redis container example
-on: push
+on: 
+  push:
+  workflow_dispatch:
 
 jobs:
   # Label of the container job
@@ -8,37 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     # Docker Hub image that `container-job` executes in
     container: node:20.14.0-alpine3.20
+    environment:
+      name: dev
+    env:
+      JOB_LEVEL_VAR: "example_value"
 
-    # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      redis:
-        # Docker Hub image
-        image: redis
-        # Set health checks to wait until redis has started
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
-      # Downloads a copy of the code in your repository before running CI tests
-      - name: Check out repository code
-        uses: actions/checkout@v4
-
-      # Performs a clean installation of all dependencies in the `package.json` file
-      # For more information, see https://docs.npmjs.com/cli/ci.html
-      - name: Install dependencies
-        run: npm install
-
-      - name: Connect to Redis
-        # Invokes the custom action instead of running the 'node' command
-        uses: ./
-        # Environment variable used by the `client.js` script to create a new Redis client.
-         
-        env:
-          # The hostname used to communicate with the Redis service container
-          REDIS_HOST: redis
-          # The default Redis port
-          REDIS_PORT: 6379
+      
+      - name: Step 1 - Print Job Level Env Variable
+        run: |
+          echo 'Job-level variable: $JOB_LEVEL_VAR'
+          echo 'secrets from the dev environment: ${{ secrets.FAMILY_NAME }}'
+          echo 'variables from the dev environment: ${{ vars.NAME }}'
+          echo 'Repository secrets: ${{ secrets.PHONE_NUMBER }}'
+          echo 'Repository variables: ${{ vars.PROJECT_NAME }}'
+        
