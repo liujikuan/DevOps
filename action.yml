@@ -1,9 +1,0 @@
-name: 'Sample JavaScript Action'
-description: 'A sample GitHub Action to run client.js'
-inputs:
-    MyInput:
-        description: ''
-        required: false
-runs:
-    using: 'node12'
-    main: 'client.js'
