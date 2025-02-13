@@ -72,6 +72,7 @@ sudo ./sam-installation/install
 # EnvVar
 
 **Branch:** `envVar` 
+
 **Description:**
 This GitHub Actions workflow demonstrates how to use secrets and variables at different scopes, including workflow-level, job-level, environment-level, and repository-level.
 
