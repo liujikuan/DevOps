@@ -7,6 +7,7 @@ This repository contains various DevOps-related projects, each stored in a diffe
 
 - [Service Container & RedisClient](https://github.com/liujikuan/DevOps/tree/serviceContainerAndRedisClient)
 
+- [envVar](https://github.com/liujikuan/DevOps/tree/envVar) 
   
 
 # Serverless Payment API
@@ -68,8 +69,11 @@ sudo ./sam-installation/install
 ● Built CI/CD pipelines using GitHub actions, automating testing, building, and deployment processes.
 
 
+# EnvVar
 
-
+**Branch:** `envVar` 
+**Description:**
+This GitHub Actions workflow demonstrates how to use secrets and variables at different scopes, including workflow-level, job-level, environment-level, and repository-level.
 
 
 
@@ -79,6 +83,7 @@ sudo ./sam-installation/install
 
 **Description:**
 This repository contains a sample JavaScript GitHub Action that interacts with a Redis service container which would be destroyed when the job completes.
+
 
 
 # What I did in this branch
