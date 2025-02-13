@@ -69,7 +69,7 @@ sudo ./sam-installation/install
 ● Built CI/CD pipelines using GitHub actions, automating testing, building, and deployment processes.
 
 
-# EnvVar
+# Github Actions Secrets & Variables
 
 **Branch:** `envVar` 
 
