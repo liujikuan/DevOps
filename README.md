@@ -85,7 +85,7 @@ This GitHub Actions workflow demonstrates how to use secrets and variables at di
 
 **Description:**
 
-This repository contains a sample JavaScript GitHub Action that interacts with a Redis service container which would be destroyed when the job completes.
+This repository contains a sample **JavaScript GitHub Action** that interacts with a Redis service container which would be destroyed when the job completes.
 
 The workflow has two jobs demonstrating the difference between a job running in a container and a job running on an Ubuntu runner while connecting to a service container.
 
