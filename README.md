@@ -13,6 +13,7 @@ This repository contains various DevOps-related projects, each stored in a diffe
 # Serverless Payment API
 
 **Branch:** `serverlessPaymentAPI`
+
 **Description:**
 
 This project is a **serverless payment API** built using **AWS SAM (Serverless Application Model)**. It leverages AWS services such as **API Gateway, Lambda, DynamoDB, and Cognito** to provide a secure and scalable payment processing system.
@@ -83,6 +84,7 @@ This GitHub Actions workflow demonstrates how to use secrets and variables at di
 **Branch:** `serviceContainerAndRedisClient`
 
 **Description:**
+
 This repository contains a sample JavaScript GitHub Action that interacts with a Redis service container which would be destroyed when the job completes.
 
 The workflow has two jobs demonstrating the difference between a job running in a container and a job running on an Ubuntu runner while connecting to a service container.
