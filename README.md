@@ -69,4 +69,4 @@ Repository variables: MyProject
 ---
 
 This workflow helps you understand how to manage and use **secrets and variables** effectively in **GitHub Actions**.
-
+ 
