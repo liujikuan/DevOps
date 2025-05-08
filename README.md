@@ -19,13 +19,13 @@ This is a Python-based DevOps utility that interacts with the GitHub REST API to
 ---
 
 ## 📂 Project Structure
-
+```yaml
 .
  ├── main.py             # Main script that automates PR creation
  ├── config.json         # Config file (store repo/token info)
  ├── requirements.txt    # Python dependency file
  └── README.md           # This file
-
+```
 ---
 
 ## 🔧 Prerequisites
