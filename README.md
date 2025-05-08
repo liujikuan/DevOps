@@ -3,12 +3,15 @@ This repository contains various DevOps-related projects, each stored in a diffe
 # Table of Contents
 - [Serverless Payment API](https://github.com/liujikuan/DevOps/tree/serverlessPaymentAPI)
 
+- [GitHub API Automation Tool](https://github.com/liujikuan/DevOps/tree/GithubAPIAutomationTool)
+
 - [2-factor authentication](https://github.com/liujikuan/DevOps/tree/2FA)
 
 - [Service Container & RedisClient](https://github.com/liujikuan/DevOps/tree/serviceContainerAndRedisClient)
 
 - [Secrets & Variables in Github Actions](https://github.com/liujikuan/DevOps/tree/envVar) 
   
+
 
 # Serverless Payment API
 
@@ -53,7 +56,23 @@ unzip sam-installation.zip -d sam-installation
 sudo ./sam-installation/install
 ```
 
+# GitHub API Automation Tool
+**Branch:** `GithubAPIAutomationTool`
 
+**Description:**
+This is a Python-based DevOps utility that interacts with the GitHub REST API to automate common developer tasks such as:
+
+- Creating a new branch from a base branch
+- Committing a new file to that branch
+- Creating a pull request (PR) from the branch
+- (Optional) Triggering GitHub Actions workflows manually
+
+**📌Features:**
+
+- 🔧 Fully scriptable via Python and GitHub API
+- 📤 Automates pull request creation
+- 🚀 Easy to integrate into CI/CD pipelines
+- 🔐 Secure configuration using external JSON file (token not hardcoded)
 
 
 
@@ -88,6 +107,7 @@ This GitHub Actions workflow demonstrates how to use secrets and variables at di
 This repository contains a sample **JavaScript GitHub Action** that interacts with a Redis service container which would be destroyed when the job completes.
 
 The workflow has two jobs demonstrating the difference between a job running in a container and a job running on an Ubuntu runner while connecting to a service container.
+
 
 
 # Note
