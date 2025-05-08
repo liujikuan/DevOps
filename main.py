@@ -2,7 +2,7 @@ import requests
 import json
 import base64
 
-# 读取配置
+# read the configuration from config.json
 with open('config.json') as f:
     config = json.load(f)
 
@@ -16,6 +16,15 @@ headers = {
     "Authorization": f"token {TOKEN}",
     "Accept": "application/vnd.github.v3+json"
 }
+def trigger_repository_dispatch(event_type, client_payload=None):
+    url = f"https://api.github.com/repos/{OWNER}/{REPO}/dispatches"
+    payload = {
+        "event_type": event_type,
+        "client_payload": client_payload or {}
+    }
+    response = requests.post(url, headers=headers, json=payload)
+    response.raise_for_status()
+    print(f"✅ repository_dispatch event '{event_type}' triggered.")
 
 def get_latest_commit_sha(branch):
     url = f"https://api.github.com/repos/{OWNER}/{REPO}/git/ref/heads/{branch}"
@@ -69,3 +78,9 @@ if __name__ == "__main__":
     create_branch(new_branch, latest_sha)
     create_file(new_branch, file_path, content, commit_message)
     create_pull_request(new_branch, pr_title, pr_body)
+
+    # Trigger the repository dispatch event(currently commented out)
+#    trigger_repository_dispatch("auto-pr-dispatch", {
+#        "triggered_by": "script",
+#        "pr_branch": new_branch
+#   })
