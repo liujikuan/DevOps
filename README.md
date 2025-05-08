@@ -60,7 +60,9 @@ sudo ./sam-installation/install
 **Branch:** `GithubAPIAutomationTool`
 
 **Description:**
-This is a Python-based DevOps utility that interacts with the GitHub REST API to automate common developer tasks such as:
+This is a Python-based DevOps utility that interacts with the GitHub REST API to simulate a scenario where developers need to streamline feature delivery using automation tools.
+
+It automates the following Continuous Integration steps:
 
 - Creating a new branch from a base branch
 - Committing a new file to that branch
