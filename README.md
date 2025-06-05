@@ -11,6 +11,7 @@ This repository contains various DevOps-related projects, each stored in a diffe
 
 - [Secrets & Variables in Github Actions](https://github.com/liujikuan/DevOps/tree/envVar) 
   
+- [python CI/CD azure](https://github.com/liujikuan/DevOps/tree/python-cicd-azure)
 
 
 # Serverless Payment API
@@ -92,13 +93,6 @@ It automates the following Continuous Integration steps:
 
 **Tech Stack:** JAVA, Jenkins, Azure, GitHub Actions
 
-# Secrets & Variables in Github Actions
-
-**Branch:** `envVar` 
-
-**Description:**
-This GitHub Actions workflow demonstrates how to use secrets and variables at different scopes, including workflow-level, job-level, environment-level, and repository-level.
-
 
 
 # Service Container & Redis Client
@@ -110,6 +104,26 @@ This GitHub Actions workflow demonstrates how to use secrets and variables at di
 This repository contains a sample **JavaScript GitHub Action** that interacts with a Redis service container which would be destroyed when the job completes.
 
 The workflow has two jobs demonstrating the difference between a job running in a container and a job running on an Ubuntu runner while connecting to a service container.
+
+# Secrets & Variables in Github Actions
+
+**Branch:** `envVar` 
+
+**Description:**
+This GitHub Actions workflow demonstrates how to use secrets and variables at different scopes, including workflow-level, job-level, environment-level, and repository-level.
+
+# Python CI/CD Azure
+
+**Branch:** `python-cicd-azure` 
+
+**Description:**
+This project demonstrates a fully automated CI/CD pipeline for deploying a Dockerized Python application to Azure App Service using GitHub Actions and Azure CLI.
+
+**Pipeline features:**
+1. Integrated code quality checks with Flake8 (linter), Pytest (functional tests), and Trivy (Docker image vulnerability scanning).
+2. Automated deployment of code changes to Azure Web App.
+3. Immediate visibility of changes via the public Azure Web App URL displayed in the GitHub Actions UI.
+4. Includes static code analysis with CodeQL for enhanced security.
 
 
 
