@@ -1,147 +1,171 @@
-This repository contains various DevOps-related projects, each stored in a different branch. Below is an overview of each project along with instructions to access and use them.
+- # ✅ Overview #
 
-# Table of Contents
-- [Serverless Payment API](https://github.com/liujikuan/DevOps/tree/serverlessPaymentAPI)
+    This guide walks you through:
 
-- [GitHub API Automation Tool](https://github.com/liujikuan/DevOps/tree/GithubAPIAutomationTool)
+    - Setting up Azure infrastructure
 
-- [2-factor authentication](https://github.com/liujikuan/DevOps/tree/2FA)
+    - Creating and configuring a GitHub Actions workflow
 
-- [Service Container & RedisClient](https://github.com/liujikuan/DevOps/tree/serviceContainerAndRedisClient)
+    - Deploying and running a Python app on Azure App Service via CI/CD
 
-- [Secrets & Variables in Github Actions](https://github.com/liujikuan/DevOps/tree/envVar) 
+  # Setting up Azure infrastructure
+
+    ## Step 1: Create App Service Plan (Linux, not zone-redundant)
+
+    ```bash
+  az appservice plan create \
+      --name python_cicd_demo_plan \
+      --resource-group devops_task \
+      --is-linux \
+      --sku B1 
+    ```
+
+    ## Step 2: Create the Web App for Containers
+
+    ```bash
+  az webapp create \
+      --name python-cicd-demo \
+      --plan python_cicd_demo_plan \
+      --resource-group devops_task \
+  	--runtime "PYTHON:3.10"
+    ```
+
+    ## Step 3: Set Docker container image
+
+    ```bash
+  az webapp config container set \
+    --name python-cicd-demo \
+    --resource-group devops_task \
+    --docker-registry-server-url https://ghcr.io \
+    --docker-custom-image-name ghcr.io/liujikuan/python-demo:latest
+    ```
+
+    ## Step 4: Set the WEBSITES_PORT environment variable
   
-
-
-# Serverless Payment API
-
-**Branch:** `serverlessPaymentAPI`
-
-**Description:**
-
-This project is a **serverless payment API** built using **AWS SAM (Serverless Application Model)**. It leverages AWS services such as **API Gateway, Lambda, DynamoDB, and Cognito** to provide a secure and scalable payment processing system.
-
-## Architecture
-
-The application follows a **multi-tier architecture**:
-
-- **Front Tier:** AWS API Gateway (Handles incoming HTTP requests)
-- **Logic Tier:** AWS Lambda (Business logic for payment processing)
-- **Data Tier:** Amazon DynamoDB (Stores payment data)
-- **Authentication & Authorization:** AWS Cognito (Manages user authentication)
-
-## Features
-
-- **Create a Payment** – Users can initiate a payment request.
-- **Retrieve Payment Details** – Users can fetch details of a specific payment.
-- **User Authentication** – AWS Cognito ensures secure access.
-
-## Technologies Used
-
-- **AWS Lambda** (Serverless backend)
-- **AWS API Gateway** (RESTful API)
-- **Amazon DynamoDB** (NoSQL database)
-- **AWS Cognito** (User authentication)
-- **AWS SAM** (Infrastructure as Code)
-
-## Setup Instructions:
-
-### *Install AWS SAM CLI*
-
-AWS SAM CLI is required to build and deploy the serverless application. Install it by following these steps:
-
-```bash
-curl -Lo sam-installation.zip https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
-unzip sam-installation.zip -d sam-installation
-sudo ./sam-installation/install
-```
-
-# GitHub API Automation Tool
-**Branch:** `GithubAPIAutomationTool`
-
-**Description:**
-This is a Python-based DevOps utility that interacts with the GitHub REST API to automate common developer tasks such as:
-
-- Creating a new branch from a base branch
-- Committing a new file to that branch
-- Creating a pull request (PR) from the branch
-- (Optional) Triggering GitHub Actions workflows manually
-
-**📌Features:**
-
-- 🔧 Fully scriptable via Python and GitHub API
-- 📤 Automates pull request creation
-- 🚀 Easy to integrate into CI/CD pipelines
-- 🔐 Secure configuration using external JSON file (token not hardcoded)
-
-
-
-# 2-Factor Authentication
-
-**Branch:** `2FA`
-
-**Key Features:**
-
-● Developed web interfaces for two-factor authentication using Java to mitigate unauthorized access, enhancing security for users.
-
-● To improve security for applications, integrated a source code scanning plugin into a Jenkins pipeline, triggered by new commits to GitHub. Upon receiving a vulnerability clearance report outputted by the plugin, the pipeline automatically provisions virtual machines on Azure, reducing the manual error.
-
-● Built CI/CD pipelines using GitHub actions, automating testing, building, and deployment processes.
-
-
-# Secrets & Variables in Github Actions
-
-**Branch:** `envVar` 
-
-**Description:**
-This GitHub Actions workflow demonstrates how to use secrets and variables at different scopes, including workflow-level, job-level, environment-level, and repository-level.
-
-
-
-# Service Container & Redis Client
-
-**Branch:** `serviceContainerAndRedisClient`
-
-**Description:**
-
-This repository contains a sample **JavaScript GitHub Action** that interacts with a Redis service container which would be destroyed when the job completes.
-
-The workflow has two jobs demonstrating the difference between a job running in a container and a job running on an Ubuntu runner while connecting to a service container.
-
-
-
-# Note
-
-## some useful Git commands
-
-git remote set-url origin `https://liujikuan:<personal access token>@github.com/liujikuan/DevOps.git`
-
-git log --all --decorate --oneline --graph
-
-## Github actions 
-
-**are categorized into two:**
-1. use a container action to run containerized code
-2. use a JavaScript action to run javascript code such as Node.js code
-
-
-
-**The following command triggers a GitHub Actions workflow for the specified branch using the GitHub API**
-
-curl -X POST \
-  -H "Accept: application/vnd.github.v3+json" \
-  -H "Authorization: token `<personal access token>`" \
-  https://api.github.com/repos/liujikuan/DevOps/actions/workflows/main.yml/dispatches \
-  -d '{"ref":"main"}'
-
-
-
-## Jenkins pipeline
-
-### Configure Github webhook to trigger the pipeline
-
-1. Use ngrok as a HTTP proxy
-2. create a freestyle project, and set the Git repository in the *Source Code Management* section
-3. check the *GitHub hook trigger for GITScm polling* option in Jenkins.
-4. create or update a file in the repository
-
+  
+    If your container listens on port `5000`, you must **map that internal port to port 80 in Azure App Service** using the `WEBSITES_PORT` application setting.
+  
+    #### 🔧 Steps via Azure Portal:
+  
+      1. Go to your **App Service > Settings > Environment variables**.
+      2. Under **App Settings**, click **Add**:
+         - **Name**: `WEBSITES_PORT`
+         - **Value**: `5000`
+      3. Click **Apply** and restart the App Service.
+  
+    #### 🔧 Steps via Azure Cli:
+  
+    ```bash
+  az webapp config appsettings set \
+    --name python-cicd-demo \
+    --resource-group devops_task \
+    --settings WEBSITES_PORT=5000
+    ```
+  
+    ## Step 5 : Download publish profile manually
+  
+     (the publish profile will be used to deploy a docker container to the Azure app service.)
+  
+  
+  Go to “Overview” page of your App Service, look for and click the "Download publish profile" button near the top.
+  It will download an .PublishSettings file (this is the publish profile).
+  
+  
+  Copy the contents of this file into GitHub secret `AZURE_WEBAPP_PUBLISH_PROFILE` later.
+  
+  
+  
+  
+  # 🔐 Set up CI/CD pipelines
+  
+  ## 1. Set Up GitHub Environment Secrets
+  
+    In the GitHub repo:
+  
+    Navigate to `Settings` -> `Environments`
+  
+    Create a new environment (e.g., prod)
+  
+    Add the following secrets to that environment:
+  
+    > AZURE_WEBAPP_PUBLISH_PROFILE: <The content of publish-profile.xml>
+  
+  ## 2. Prepare workflow files
+  
+    The pipeline is structured in three jobs:
+  
+    - build: Builds, test and pushes the Docker image to GitHub Container Registry (GHCR)
+      - Build and run a Docker container in a GitHub runner 
+      - Lint with flake8
+      - Run functional tests with Pytest
+      - Run Trivy vulnerability scanner
+      - Log in to and push the Docker Image to GitHub Container Registry
+    - test_CodeQL: Runs CodeQL static analysis
+    - deploy: Deploys the image to Azure Web App
+  
+  ## 3.  Set up a personal access token 
+  
+      1. Navigate to "Settings" -> "Developer settings" -> "Personal Access Tokens" -> "Fine-grained tokens".
+  
+    Ensure the PAT includes these permissions:
+  
+  - **Actions**: Read & Write
+  
+  - **Contents**: Read & Write
+  
+  - **Workflows**: Read & Write
+  
+  ##  4. 📤Push code to repo
+  
+  In a local repo, run the following  command:
+  
+    - git branch -M main
+    - git remote add origin https://<your_github_id>:<your_access_token>@github.com/<your_github_org>/<your_github_repo>.git
+    - git checkout -b develop
+    - git push --set-upstream origin develop
+  
+  ## 5. change the default branch(optional)
+  
+   In the GitHub repo:
+  
+  1. Navigate to `Settings` -> `General`
+  2. Under "Default branch", click the `bidirectional arrow` button to the right of the default branch name . 
+  3. Switch default branch to the `main` branch
+  
+  ## 6. Set up branch protection rules(optional)
+  
+    ✅ Steps to Forbid Merging When Checks Fail:
+  
+  - Go to your repository on GitHub.
+    Click on `Settings` →  `Rules` -> `Rulesets`,  then  `New ruleset` -> `New branch ruleset`.
+    Set the branch naming pattern (i.e., main).
+  
+  - Enable the following options:
+    ✅ Require a pull request before merging
+    ✅ Require status checks to pass before merging
+    ✅ Select the specific checks (e.g., build, test, lint) that must pass.
+  
+    Click Create or Save changes.
+  
+  
+  
+  
+  
+  ## ✅ Tests
+  
+  CLI testing tools:
+  
+  - flake8(linter)
+  - pytest(functional test)
+  - Trivy(Docker image scanning)
+  
+  
+  
+  _Once the deployment completes, you can find the live app’s URL in two ways:_
+  
+  - in the **"Summary"**  section at a GitHub Actions workflow run page.
+  - By visiting the **Deployments** tab at:
+     `https://github.com/<your_github_id>/<your_github_repo>/deployments`,
+     then selecting the relevant environment (e.g., `prod`) to view the latest deployment details and URL.
+  
+  

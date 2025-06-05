@@ -1,0 +1,132 @@
+# .github/workflows/main.yml
+name: python-app
+
+on: 
+  push:
+    branches:
+      - 'feature-*'
+      - develop
+      - staging
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+env:
+  IMAGE_NAME: python-demo
+  CONTAINER_NAME: python-demo_container
+  AZURE_WEBAPP_NAME: python-cicd-demo
+jobs:
+  build:
+    permissions:
+      contents: read
+      pull-requests: write
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Docker availability
+        run: docker info || echo "No Docker access"
+
+      - name: Build Docker image
+        run: |
+          echo "Building Docker image..."
+          docker build -t $IMAGE_NAME .
+
+      - name: Run Docker container
+        run: |
+          echo "Running Docker container with port mapping..."
+          docker run -d --name $CONTAINER_NAME -p 5000:5000 $IMAGE_NAME
+
+      - name: Display running containers
+        run: docker ps
+
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          flake8 app/
+
+      - name: Run tests
+        run: |
+          pip install pytest
+          echo "---------print container logs............."
+          docker logs $CONTAINER_NAME
+          curl -v http://localhost:5000/healthz || echo "5000 port cannnot be accessed"
+          pytest tests
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref:  ${{ env.IMAGE_NAME }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+          
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag Docker image for GHCR
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker tag $IMAGE_NAME $IMAGE_ID
+
+      - name: Push Docker image to GHCR
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push $IMAGE_ID
+  test_CodeQL:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+      # only required for workflows in private repositories
+      actions: read
+      contents: read    
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - language: actions
+          build-mode: none
+        - language: python
+          build-mode: none
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+
+          
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: 'prod'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    needs: [build, test_CodeQL]
+    steps:
+      - name: deploy to Azure webapp
+        uses: azure/webapps-deploy@v3.0.1
+        id: deploy-to-webapp
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+ 
