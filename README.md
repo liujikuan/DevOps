@@ -79,16 +79,25 @@ Follow the prompts to configure deployment settings.
 #### 4.2 Customize the style of your login page.
 **Steps**:
 1. Sign in to the AWS Cognito Console.
-2. Go to User Pools → Select your user pool.
+2. Go to `User Pools` → Select your user pool.
 3. Navigate to **Managed login** under *Branding* → Click on *Create a style*.
 #### 4.3 Obtain Cognito Token for API Authentication
 Here I use `Implicit` OAuth grant type as an example:
 **Steps:**
+
 1. Set up Allowed callback URLs in the App client configuration page.
+
 2. Use the AWS Cognito Hosted UI or authenticate using the API.
-sample URL: 
-`https://<custom domain>.auth.<region>.amazoncognito.com/oauth2/authorize?client_id=<CLIENT_ID>&redirect_uri=<REDIRECT_URI>&response_type=token&scope=<SCOPE>`
+  sample URL: 
+  `https://<custom domain>.auth.<region>.amazoncognito.com/oauth2/authorize?client_id=<CLIENT_ID>&redirect_uri=<REDIRECT_URI>&response_type=token&scope=<SCOPE>`
+
 3. Extract the `access_token` from the response(if using  `Implicit`).
+
+4. Extract the `id_token` from the response(if grant type ==  `Implicit` and OpenID Connect scopes == "OpenID").
+
+   - The `phone`, `email` scope requires `OpenID` scope to be selected
+
+   - The `id_token` will contain information about `phone` or `email` if above scopes are set and their values are set for one user in the `users` tab.
 ### 5. Testing the API
 #### Retrieve API Gateway URL
 After deployment, retrieve your API Gateway URL by running:
@@ -110,6 +119,9 @@ curl -X GET https://<your-api-id>.execute-api.region.amazonaws.com/prod/payment?
 ```
 
 #### Get User Info
+
+the command works only if 'openid' scope is contained in the `access_token`
+
 ```bash
 curl -X GET https://<custom domain>.auth.<region>.amazoncognito.com/oauth2/userInfo -H 'Authorization: Bearer <your_cognito_access_token>'
 ```
