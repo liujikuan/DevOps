@@ -82,9 +82,9 @@ Follow the prompts to configure deployment settings.
 2. Go to `User Pools` → Select your user pool.
 3. Navigate to **Managed login** under *Branding* → Click on *Create a style*.
 #### 4.3 Obtain Cognito Token for API Authentication
-Here I use `Implicit` OAuth grant type as an example:
-**Steps:**
+(Here I use `Implicit` OAuth grant type as an example.)
 
+**Steps:**
 1. Set up Allowed callback URLs in the App client configuration page.
 
 2. Use the AWS Cognito Hosted UI or authenticate using the API.
