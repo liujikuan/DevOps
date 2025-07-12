@@ -1,42 +1,76 @@
-## Next Steps: Building a Client Application
+## Next Steps: Build a Python Authentication Client
 
-After deploying the backend, you can develop a client application (web, mobile, or CLI) to interact with the Payment API securely using AWS Cognito authentication.
+You can develop a Python application that authenticates users via AWS Cognito and accesses your Payment API endpoints.
 
-### 1. Choose a Client Framework
-
-- **Web:** React, Angular, Vue.js
-- **Mobile:** React Native, Flutter, Swift, Kotlin
-- **CLI:** Python, Node.js
-
-### 2. Integrate AWS Cognito Authentication
-
-- Use AWS Amplify or AWS SDKs to implement user sign-up, sign-in, and token retrieval.
-- Authenticate users via Cognito Hosted UI or custom login forms.
-- Store and manage tokens (`access_token`, `id_token`) securely.
-
-### 3. Call the Payment API
-
-- Attach the Cognito `access_token` in the `Authorization` header for API requests.
-- Implement features to create payments, retrieve payment details, and fetch user info.
-
-### Example: Using AWS Amplify in a React App
+### 1. Install Required Packages
 
 ```bash
-npm install aws-amplify @aws-amplify/ui-react
+pip install requests flask
 ```
 
-Configure Amplify with your Cognito details, then use the provided authentication components and API calls.
+### 2. Implement Cognito Authentication Flow
 
-### 4. Test End-to-End
+- Use Flask to create a simple web app.
+- Redirect users to the Cognito Hosted UI for login.
+- After login, Cognito redirects back with `id_token` and `access_token`.
 
-- Sign up/sign in users via your app.
-- Make authenticated requests to the Payment API.
-- Handle errors and token expiration gracefully.
+### 3. Use Access Token to Call API Gateway
 
-### 5. Secure & Enhance
+- Send requests to `/payment` endpoints with the `Authorization: Bearer <access_token>` header.
 
-- Implement proper error handling and input validation.
-- Use HTTPS for all client-server communication.
-- Consider adding logging, monitoring, and analytics.
+### Example Python App Outline
 
-For detailed guides, refer to [AWS Amplify Documentation](https://docs.amplify.aws/) or [AWS Cognito Developer Guide](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html).
+```python
+# Example: app.py
+import os
+import requests
+from flask import Flask, redirect, request
+
+COGNITO_DOMAIN = "https://<your-domain>.auth.<region>.amazoncognito.com"
+CLIENT_ID = "<your-client-id>"
+REDIRECT_URI = "http://localhost:5000/callback"
+API_URL = "https://<your-api-id>.execute-api.<region>.amazonaws.com/prod/payment"
+
+app = Flask(__name__)
+
+@app.route('/')
+def login():
+    auth_url = (
+        f"{COGNITO_DOMAIN}/oauth2/authorize"
+        f"?response_type=token&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope=openid+email"
+    )
+    return redirect(auth_url)
+
+@app.route('/callback')
+def callback():
+    # Extract tokens from URL fragment (handled client-side, e.g., with JS)
+    data = # define the data variable here
+    access_token = data.get('access_token')
+    id_token = data.get('id_token')
+    # Call the API using the access_token
+    api_response = call_api(access_token)
+    return "Logged in! Now use your access_token to call the API."
+
+def call_api(access_token):
+    headers = {"Authorization": f"Bearer {access_token}"}
+    response = requests.get(API_URL, headers=headers)
+    return response.json()
+
+if __name__ == "__main__":
+    app.run(debug=True)
+```
+
+> **Note:** For production, handle tokens securely and use HTTPS.
+
+### 4. Integrate with API Gateway
+
+- The API Gateway is already configured to use Cognito as the authorizer (see `template.yaml`).
+- Your Python app must include the `access_token` in the `Authorization` header for all requests to protected endpoints.
+
+### 5. Test the Flow
+
+1. Run your Python app.
+2. Log in via Cognito Hosted UI.
+3. Use the returned `access_token` to access `/payment` endpoints.
+
+For more details, see [AWS Cognito OAuth2 Documentation](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-userpools-server-contract-reference.html) and [requests library docs](https://docs.python-requests.org/en/latest/).
